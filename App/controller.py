@@ -36,6 +36,11 @@ def new_controller():
     Crea una instancia del modelo
     """
     #TODO: Llamar la función del modelo que crea las estructuras de datos
+    control = {
+        'model': None
+    }
+    control['model'] = model.new_data_structs()
+    return control
     pass
 
 
@@ -46,6 +51,13 @@ def load_data(control, filename):
     Carga los datos del reto
     """
     # TODO: Realizar la carga de datos
+    results_file = "Data/Challenge-3/earthquakes/temblores-utf8-small.csv"
+    file = csv.DictReader(open(results_file, encoding='utf8'))
+    
+    for data in file:
+        model.add_results(data_structs,data)
+    
+    return model.data_size(data_structs['results'])
     pass
 
 

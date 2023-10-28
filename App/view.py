@@ -67,6 +67,7 @@ def load_data(control):
     Carga los datos
     """
     #TODO: Realizar la carga de datos
+    
     pass
 
 

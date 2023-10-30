@@ -55,10 +55,10 @@ def load_data(control, filename):
     file = csv.DictReader(open(results_file, encoding='utf8'))
     
     for data in file:
-        model.add_results(data_structs,data)
+        model.add_data(control["model"],data)
     
-    return model.data_size(data_structs['results'])
-    pass
+    return model.data_size(control["model"]['temblores'])
+    
 
 
 # Funciones de ordenamiento

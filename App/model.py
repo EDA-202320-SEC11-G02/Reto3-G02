@@ -70,7 +70,9 @@ def add_data(data_structs, data):
     Función para agregar nuevos elementos a la lista
     """
     #TODO: Crear la función para agregar elementos a una lista
-    pass
+    lista = data_structs['temblores']
+    lt.addLast(lista,data)
+    return data_structs
 
 
 # Funciones para creacion de datos

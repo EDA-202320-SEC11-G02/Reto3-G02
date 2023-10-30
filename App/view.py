@@ -31,6 +31,7 @@ from DISClib.DataStructures import mapentry as me
 assert cf
 from tabulate import tabulate
 import traceback
+import pandas as pd
 
 """
 La vista se encarga de la interacción con el usuario
@@ -45,7 +46,8 @@ def new_controller():
         Se crea una instancia del controlador
     """
     #TODO: Llamar la función del controlador donde se crean las estructuras de datos
-    pass
+    control=controller.new_controller()
+    return control
 
 
 def print_menu():
@@ -67,16 +69,27 @@ def load_data(control):
     Carga los datos
     """
     #TODO: Realizar la carga de datos
-    
-    pass
+    temblores=controller.load_data(control)
+    return temblores 
 
 
-def print_data(control, id):
+def print_data(lista,tamano):
     """
         Función que imprime un dato dado su ID
     """
     #TODO: Realizar la función para imprimir un elemento
-    pass
+    columna=[["code","time","lat","long","mag","sig","nst","gap","title","depth","felt","cdi","mmi","tsunami"]]
+    for i in range(1,4):
+        temblor=lt.getElement(lista,i)
+        fila=[temblor["code"],temblor["time"],temblor["lat"],str(temblor["log"])+" - "+str(temblor["mag"]),temblor["sig"], temblor["nst"], temblor["gap"], temblor["title"], temblor["depth"], temblor["felt"], temblor["cdi"], temblor["mmi"], temblor["tsunami"]]
+        serie= pd.Series(fila).str.wrap(30)
+        columna.append(serie)
+    for i in range(tamano-2,tamano+1):
+        temblor=lt.getElement(lista,i)
+        fila=[temblor["code"],temblor["time"],temblor["lat"],str(temblor["log"])+" - "+str(temblor["mag"]),temblor["sig"], temblor["nst"], temblor["gap"], temblor["title"], temblor["depth"], temblor["felt"], temblor["cdi"], temblor["mmi"], temblor["tsunami"]]
+        serie= pd.Series(fila).str.wrap(30)
+        columna.append(serie)
+    print(tabulate(columna,tablefmt="grid"))
 
 def print_req_1(control):
     """
@@ -158,6 +171,15 @@ if __name__ == "__main__":
         if int(inputs) == 1:
             print("Cargando información de los archivos ....\n")
             data = load_data(control)
+            print("earthquakes event size:",data)
+            print("\n===============================")
+            print("===EARTHQUAKES RECORD REPORT===")
+            print("===============================\n")
+            print("----EARTHQUAKES RESULTS----")
+            print("Total Earthquakes: ",data)
+            print_data(control["model"]["temblores"],data)
+
+
         elif int(inputs) == 2:
             print_req_1(control)
 

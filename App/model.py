@@ -39,6 +39,7 @@ from DISClib.Algorithms.Sorting import insertionsort as ins
 from DISClib.Algorithms.Sorting import selectionsort as se
 from DISClib.Algorithms.Sorting import mergesort as merg
 from DISClib.Algorithms.Sorting import quicksort as quk
+import datetime as dt
 assert cf
 
 """
@@ -60,7 +61,7 @@ def new_data_structs():
                
                     }
     return data_structs
-    pass
+    
 
 
 # Funciones para agregar informacion al modelo
@@ -103,12 +104,43 @@ def data_size(data_structs):
     pass
 
 
-def req_1(data_structs):
+def req_1(data_structs, ini_date, fin_date):
     """
-    Función que soluciona el requerimiento 1
+    Descripción: Una lista que retorna una lista los terremotos
+                 que sucedierón en un rango de fechas
+    Args: 
+         - data_structs: variable donde están cargados los datos
+         - ini_date: fecha en la cual inicia la busqueda
+         - fin_date: fecha en la cual finaliza la busqueda
+    Return: Lista de los terremotos que sucedieron en el rango
     """
     # TODO: Realizar el requerimiento 1
-    pass
+
+    #Primero hacemos un árbol RBT de los datos de los terremotos
+    #Usamos las fechas como las llaves, pasandolas por la función 
+    #datetime de la librería datetime
+    lista = lt.newList("ARRAY_LIST")
+    map = om.newMap(omaptype="RBT")
+    
+    for item in lt.iterator(data_structs):
+        om.put(map, dt.datetime(item[2]), item)
+
+    #Una vez tenemos el árbol conseguimos una lista de todas las llaves
+    #Iteramos sobre la lista comparando las fechas
+    #Si una fecha cae dentro del rango, integramamos la información
+    #de su registro
+    keys = om.keySet(map)
+    ini_dt = dt.datetime(ini_date)
+    fin_dt = dt.datetime(fin_date)
+
+    for key in lt.iterator(keys):
+        if ini_dt <= key <= fin_dt:
+            x = om.get(map, key)
+            lt.addLast(lista, x)
+
+    return lt.size(lista), lista
+
+
 
 
 def req_2(data_structs):

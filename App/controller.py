@@ -41,7 +41,7 @@ def new_controller():
     }
     control['model'] = model.new_data_structs()
     return control
-    pass
+    
 
 
 # Funciones para la carga de datos
@@ -81,12 +81,13 @@ def get_data(control, id):
     pass
 
 
-def req_1(control):
+def req_1(control, ini_date, fin_date):
     """
     Retorna el resultado del requerimiento 1
     """
     # TODO: Modificar el requerimiento 1
-    pass
+    cantidad, lista = model.req_1(control["model"], ini_date, fin_date)
+    return cantidad, lista
 
 
 def req_2(control):

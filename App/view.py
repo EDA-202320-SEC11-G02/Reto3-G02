@@ -79,15 +79,21 @@ def print_data(lista,tamano):
     """
     #TODO: Realizar la función para imprimir un elemento
     columna=[["code","time","lat","long","mag","sig","nst","gap","title","depth","felt","cdi","mmi","tsunami"]]
-    for i in range(1,4):
+    for i in range(1,6):
         temblor=lt.getElement(lista,i)
-        fila=[temblor["code"],temblor["time"],temblor["lat"],str(temblor["log"])+" - "+str(temblor["mag"]),temblor["sig"], temblor["nst"], temblor["gap"], temblor["title"], temblor["depth"], temblor["felt"], temblor["cdi"], temblor["mmi"], temblor["tsunami"]]
-        serie= pd.Series(fila).str.wrap(30)
+        fila=[str(temblor["code"]),temblor["time"],str(temblor["lat"]),str(temblor["long"]),str(temblor["mag"]),temblor["sig"], str(temblor["nst"]), temblor["gap"], temblor["title"], temblor["depth"], str(temblor["felt"]), temblor["cdi"], temblor["mmi"], temblor["tsunami"]]
+        for j in range(len(fila)):
+            if fila[j]=="":
+                fila[j]="Unknown"
+        serie= pd.Series(fila).str.wrap(15)
         columna.append(serie)
-    for i in range(tamano-2,tamano+1):
+    for i in range(tamano-4,tamano+1):
         temblor=lt.getElement(lista,i)
-        fila=[temblor["code"],temblor["time"],temblor["lat"],str(temblor["log"])+" - "+str(temblor["mag"]),temblor["sig"], temblor["nst"], temblor["gap"], temblor["title"], temblor["depth"], temblor["felt"], temblor["cdi"], temblor["mmi"], temblor["tsunami"]]
-        serie= pd.Series(fila).str.wrap(30)
+        fila=[str(temblor["code"]),temblor["time"],str(temblor["lat"]),str(temblor["long"]),str(temblor["mag"]),temblor["sig"], str(temblor["nst"]), temblor["gap"], temblor["title"], temblor["depth"], str(temblor["felt"]), temblor["cdi"], temblor["mmi"], temblor["tsunami"]]
+        for j in range(len(fila)):
+            if fila[j]=="":
+                fila[j]="Unknown"
+        serie= pd.Series(fila).str.wrap(15)
         columna.append(serie)
     print(tabulate(columna,tablefmt="grid"))
 

@@ -46,13 +46,13 @@ def new_controller():
 
 # Funciones para la carga de datos
 
-def load_data(control, filename):
+def load_data(control):
     """
     Carga los datos del reto
     """
     # TODO: Realizar la carga de datos
-    results_file = "Data/Challenge-3/earthquakes/temblores-utf8-small.csv"
-    file = csv.DictReader(open(results_file, encoding='utf8'))
+    temblores_file = "Data/Challenge-3/earthquakes/temblores-utf8-small.csv"
+    file = csv.DictReader(open(temblores_file, encoding='utf8'))
     
     for data in file:
         model.add_data(control["model"],data)

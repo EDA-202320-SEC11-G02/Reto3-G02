@@ -56,7 +56,8 @@ def new_data_structs():
     """
     #TODO: Inicializar las estructuras de datos
     temblores = lt.newList(datastructure="ARRAY_LIST")
-    data_structs = {"temblores": temblores
+    magnitud=om.newMap(omaptype="RBT")
+    data_structs = {"temblores": temblores,"magnitud":magnitud
                
                     }
     return data_structs
@@ -72,6 +73,17 @@ def add_data(data_structs, data):
     #TODO: Crear la función para agregar elementos a una lista
     lista = data_structs['temblores']
     lt.addLast(lista,data)
+
+    mapa_magnitud=data_structs["magnitud"]
+    magnitud=data["mag"]
+    if om.contains(mapa_magnitud,magnitud):
+        mapentry=om.get(mapa_magnitud,magnitud)
+        magnitud_search=me.getValue(mapentry)
+        lt.addLast(magnitud_search,data)
+    else:
+        magnitud_search=lt.newList(datastructure="ARRAY_LIST")
+        lt.addLast(magnitud_search,data)
+        om.put(mapa_magnitud,magnitud,magnitud_search)
     return data_structs
 
 
@@ -100,7 +112,7 @@ def data_size(data_structs):
     Retorna el tamaño de la lista de datos
     """
     #TODO: Crear la función para obtener el tamaño de una lista
-    pass
+    return lt.size(data_structs)
 
 
 def req_1(data_structs):

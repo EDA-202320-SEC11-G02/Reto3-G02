@@ -115,7 +115,16 @@ def data_size(data_structs):
     #TODO: Crear la función para obtener el tamaño de una lista
     return lt.size(data_structs)
 
-
+def make_datetime(string):
+    temp = string.split("T")
+    temp[0] = temp[0].split("-")
+    temp[1] = temp[1].split(":")
+    x = temp[1][2].split(".")
+    temp.append(x)
+    size = len(temp[2][1]) - 1
+    rta = dt.datetime(year=int(temp[0][0]), month=int(temp[0][1]), day=int(temp[0][2]), hour=int(temp[1][0]), minute=int(temp[1][1]), second=int(temp[2][0]), microsecond=int(temp[2][1][0:size]))
+    return rta
+    
 def req_1(data_structs, ini_date, fin_date):
     """
     Descripción: Una lista que retorna una lista los terremotos
@@ -134,20 +143,21 @@ def req_1(data_structs, ini_date, fin_date):
     lista = lt.newList("ARRAY_LIST")
     map = om.newMap(omaptype="RBT")
     
-    for item in lt.iterator(data_structs):
-        om.put(map, dt.datetime(item[2]), item)
+    for item in (data_structs["temblores"]["elements"]):
+        om.put(map, (item["time"]), item)
 
     #Una vez tenemos el árbol conseguimos una lista de todas las llaves
     #Iteramos sobre la lista comparando las fechas
     #Si una fecha cae dentro del rango, integramamos la información
     #de su registro
     keys = om.keySet(map)
-    ini_dt = dt.datetime(ini_date)
-    fin_dt = dt.datetime(fin_date)
+    ini_dt = make_datetime(ini_date)
+    fin_dt = make_datetime(fin_date)
 
-    for key in lt.iterator(keys):
+    for j in lt.iterator(keys):
+        key = make_datetime(str(j))
         if ini_dt <= key <= fin_dt:
-            x = om.get(map, key)
+            x = om.get(map, j)
             lt.addLast(lista, x)
 
     return lt.size(lista), lista

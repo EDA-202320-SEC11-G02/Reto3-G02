@@ -102,7 +102,40 @@ def print_req_1(control):
         Función que imprime la solución del Requerimiento 1 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 1
-    pass
+    final = lt.newList("ARRAY_LIST")
+    fecha_ini = input("Ingrese la fecha donde quiere inciar la busqueda: \n")
+    fecha_fin = input("Ingrede la fecha donde quiere finalizar la busqueda: \n")
+    size, data = controller.req_1(control, fecha_ini, fecha_fin)
+    titles = "mag,place,time,updated,tz,felt,cdi,mmi,alert,status,tsunami,sig,net,code,ids,sources,types,nst,dmin,rms,gap,magType,type,title,long,lat,depth"
+    titles = titles.split(",")
+    columna=[["code","time","lat","long","mag","sig","nst","gap","title","depth","felt","cdi","mmi","tsunami"]]
+    if size>6:
+        for i in range(0,6):
+            if i<3:
+                lt.addLast(final, data["elements"][i])
+            else: 
+                x = i-3
+                lt.addLast(final,data["elements"][x])
+    else:
+        final = data
+        
+    for x in final["elements"]:
+        registro = []
+        for v in x["value"].values():
+            v = str(v)
+            if v == "":
+                v = "Unknown"
+            registro.append(v)    
+        serie = pd.Series(registro).str.wrap(15)
+        columna.append(serie)
+        
+        
+    print("="*34)
+    print("La cantidadd de terremotos encontrados es: " + str(size))
+    print(tabulate(columna, tablefmt="grid"))
+        
+        
+    
 
 
 def print_req_2(control):

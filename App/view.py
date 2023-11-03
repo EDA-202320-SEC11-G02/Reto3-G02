@@ -138,11 +138,30 @@ def print_req_1(control):
     
 
 
-def print_req_2(control):
+def print_req_2(temblores):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 2
+    contador=0
+    contador_2=1 
+    lista=[1,2,3,lt.size(temblores)-2,lt.size(temblores)-1,lt.size(temblores)]   
+    columna_2=[["events","details"]]
+    for magnitud  in lt.iterator(temblores):
+        if contador_2 in lista:
+            columna=[["time","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
+            for temblor in lt.iterator(magnitud):
+                fila=[str(temblor["time"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+                serie= pd.Series(fila).str.wrap(15)
+                columna.append(serie)
+            tabla=tabulate(columna,tablefmt="grid")
+            fila_2=[str(lt.size(magnitud)),tabla]
+            serie_2=pd.Series(fila_2)
+            columna_2.append(serie_2)
+        contador+=lt.size(magnitud)
+    print("Total events btween magnitudes:",contador)
+    print(tabulate(columna_2,tablefmt="grid"))
+
     pass
 
 
@@ -223,7 +242,13 @@ if __name__ == "__main__":
             print_req_1(control)
 
         elif int(inputs) == 3:
-            print_req_2(control)
+            lower_mag=float(input('Ingrese el limite inferior de la magnitud: '))
+            upper_mag=float(input("Ingrese el limite superior de la magnitud: "))
+            resultado=controller.req_2(control,lower_mag,upper_mag)
+            print("======Req No. 2 Results======")
+            print("Total different magnitudes",lt.size(resultado))
+            print_req_2(resultado)
+            
 
         elif int(inputs) == 4:
             print_req_3(control)

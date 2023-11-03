@@ -76,7 +76,7 @@ def add_data(data_structs, data):
     lt.addLast(lista,data)
 
     mapa_magnitud=data_structs["magnitud"]
-    magnitud=data["mag"]
+    magnitud=float(data["mag"])
     if om.contains(mapa_magnitud,magnitud):
         mapentry=om.get(mapa_magnitud,magnitud)
         magnitud_search=me.getValue(mapentry)
@@ -165,12 +165,14 @@ def req_1(data_structs, ini_date, fin_date):
 
 
 
-def req_2(data_structs):
+def req_2(data_structs,lower_mag,upper_mag):
     """
     Función que soluciona el requerimiento 2
     """
     # TODO: Realizar el requerimiento 2
-    pass
+    arbol=data_structs["magnitud"]
+    temblores_filtrados=om.values(arbol,lower_mag,upper_mag)
+    return temblores_filtrados
 
 
 def req_3(data_structs):

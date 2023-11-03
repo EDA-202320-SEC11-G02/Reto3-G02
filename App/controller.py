@@ -90,12 +90,13 @@ def req_1(control, ini_date, fin_date):
     return cantidad, lista
 
 
-def req_2(control):
+def req_2(control,lower_mag,upper_mag):
     """
     Retorna el resultado del requerimiento 2
     """
     # TODO: Modificar el requerimiento 2
-    pass
+    respuesta=model.req_2(control["model"],lower_mag,upper_mag)
+    return respuesta
 
 
 def req_3(control):

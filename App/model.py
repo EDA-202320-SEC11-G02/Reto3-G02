@@ -40,6 +40,7 @@ from DISClib.Algorithms.Sorting import selectionsort as se
 from DISClib.Algorithms.Sorting import mergesort as merg
 from DISClib.Algorithms.Sorting import quicksort as quk
 import datetime as dt
+from datetime import datetime as d
 assert cf
 
 """
@@ -172,7 +173,11 @@ def req_2(data_structs,lower_mag,upper_mag):
     # TODO: Realizar el requerimiento 2
     arbol=data_structs["magnitud"]
     temblores_filtrados=om.values(arbol,lower_mag,upper_mag)
-    return temblores_filtrados
+    contador=0
+    for temblores_mag in lt.iterator(temblores_filtrados):
+        merg.sort(temblores_mag,cmp_temblores_by_fecha)
+        contador+=lt.size(temblores_mag)
+    return temblores_filtrados,contador
 
 
 def req_3(data_structs):
@@ -230,7 +235,16 @@ def compare(data_1, data_2):
     Función encargada de comparar dos datos
     """
     #TODO: Crear función comparadora de la lista
+
     pass
+
+def cmp_temblores_by_fecha(resultado1,resultado2):
+    date_1=d.strptime(resultado1["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    date_2=d.strptime(resultado2["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    if date_1<=date_2:
+        return False
+    elif date_1>date_2:
+        return True
 
 # Funciones de ordenamiento
 

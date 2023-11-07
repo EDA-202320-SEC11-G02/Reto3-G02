@@ -187,13 +187,38 @@ def req_3(data_structs):
     # TODO: Realizar el requerimiento 3
     pass
 
+def cmp_4(sig1, sig2):
+    sig1 = int(sig1)
+    sig2 = int(sig2)
 
-def req_4(data_structs):
+    if sig1>sig2:
+        return 1
+    elif sig2>sig1:
+        return -1
+    else:
+        return 0
+
+def req_4(data_structs, sig, gap):
     """
     Función que soluciona el requerimiento 4
     """
     # TODO: Realizar el requerimiento 4
-    pass
+    mapa = om.newMap(omaptype="RBT", cmpfunction=cmp_4)
+    lista = lt.newList("ARRAY_LIST")
+    gap = float(gap)
+    for item in data_structs["temblores"]["elements"]:
+        om.put(mapa, item["sig"], item)
+
+    max_key = om.maxKey(mapa)
+    keys = om.keys(mapa, sig, max_key)
+
+    for key in lt.iterator(keys):
+        item = om.get(key)
+        if float(item["gap"])< gap:
+            lt.addLast(lista, item)
+        
+    return lista
+        
 
 
 def req_5(data_structs):

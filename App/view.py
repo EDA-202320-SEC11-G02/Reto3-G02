@@ -181,7 +181,10 @@ def print_req_4(control):
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 4
-    pass
+    sig = input("Ingrese la significancia minima de la busqueda: ")
+    gap = input("Ingrese la distancia azimutal maxima de la busqueda:  ")
+
+    data = controller.req_4(control, sig, gap)
 
 
 def print_req_5(control):

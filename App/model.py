@@ -59,7 +59,8 @@ def new_data_structs():
     #TODO: Inicializar las estructuras de datos
     temblores = lt.newList(datastructure="ARRAY_LIST")
     magnitud=om.newMap(omaptype="RBT")
-    data_structs = {"temblores": temblores,"magnitud":magnitud
+    profundidad=om.newMap(omaptype="RBT")
+    data_structs = {"temblores": temblores,"magnitud":magnitud,"profundidad":profundidad
                
                     }
     return data_structs
@@ -86,6 +87,17 @@ def add_data(data_structs, data):
         magnitud_search=lt.newList(datastructure="ARRAY_LIST")
         lt.addLast(magnitud_search,data)
         om.put(mapa_magnitud,magnitud,magnitud_search)
+    
+    mapa_profundidad=data_structs["profundidad"]
+    profundidad=float(data["depth"])
+    if om.contains(mapa_profundidad,profundidad):
+        mapentry=om.get(mapa_profundidad,profundidad)
+        profundidad_search=me.getValue(mapentry)
+        lt.addLast(profundidad_search,data)
+    else:
+        profundidad_search=lt.newList(datastructure="ARRAY_LIST")
+        lt.addLast(profundidad_search,data)
+        om.put(mapa_profundidad,profundidad,profundidad_search)
     return data_structs
 
 
@@ -196,11 +208,12 @@ def req_4(data_structs):
     pass
 
 
-def req_5(data_structs):
+def req_5(data_structs,profundidad_minima,numero_minimo_estaciones):
     """
     Función que soluciona el requerimiento 5
     """
     # TODO: Realizar el requerimiento 5
+    
     pass
 
 

@@ -213,11 +213,13 @@ def req_4(data_structs, sig, gap):
     keys = om.keys(mapa, sig, max_key)
 
     for key in lt.iterator(keys):
-        item = om.get(key)
-        if float(item["gap"])< gap:
-            lt.addLast(lista, item)
-        
-    return lista
+        item = om.get(mapa, key)
+        if item['value']['gap'] == '':
+            item['value']['gap']  = 'Unknown'
+        elif float(item["value"]["gap"])< gap:
+            lt.addLast(lista, item["value"])
+    
+    return lt.size(lista), lista
         
 
 

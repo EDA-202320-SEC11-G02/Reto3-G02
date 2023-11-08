@@ -106,8 +106,6 @@ def print_req_1(control):
     fecha_ini = input("Ingrese la fecha donde quiere inciar la busqueda: \n")
     fecha_fin = input("Ingrede la fecha donde quiere finalizar la busqueda: \n")
     size, data = controller.req_1(control, fecha_ini, fecha_fin)
-    titles = "mag,place,time,updated,tz,felt,cdi,mmi,alert,status,tsunami,sig,net,code,ids,sources,types,nst,dmin,rms,gap,magType,type,title,long,lat,depth"
-    titles = titles.split(",")
     columna=[["code","time","lat","long","mag","sig","nst","gap","title","depth","felt","cdi","mmi","tsunami"]]
     if size>6:
         for i in range(0,6):
@@ -165,7 +163,6 @@ def print_req_2(temblores):
 
     print(tabulate(columna_2,tablefmt="grid"))
 
-    pass
 
 
 def print_req_3(control):
@@ -183,8 +180,34 @@ def print_req_4(control):
     # TODO: Imprimir el resultado del requerimiento 4
     sig = input("Ingrese la significancia minima de la busqueda: ")
     gap = input("Ingrese la distancia azimutal maxima de la busqueda:  ")
-
-    data = controller.req_4(control, sig, gap)
+    final = lt.newList("ARRAY_LIST")
+    size, data = controller.req_4(control, sig, gap)
+    
+    columna=[["code","time","lat","long","mag","sig","nst","gap","title","depth","felt","cdi","mmi","tsunami"]]
+    if size>6:
+        for i in range(0,6):
+            if i<3:
+                lt.addLast(final, data["elements"][i])
+            else: 
+                x = i-3
+                lt.addLast(final,data["elements"][x])
+    else:
+        final = data
+        
+    for x in final["elements"]:
+        registro = []
+        for v in x.values():
+            v = str(v)
+            if v == "":
+                v = "Unknown"
+            registro.append(v)    
+        serie = pd.Series(registro).str.wrap(15)
+        columna.append(serie)
+        
+        
+    print("="*34)
+    print("La cantidadd de terremotos encontrados es: " + str(size))
+    print(tabulate(columna, tablefmt="grid"))
 
 
 def print_req_5(control):

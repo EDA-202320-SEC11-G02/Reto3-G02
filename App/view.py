@@ -183,7 +183,7 @@ def print_req_4(control):
     final = lt.newList("ARRAY_LIST")
     size, data = controller.req_4(control, sig, gap)
     
-    columna=[["code","time","lat","long","mag","sig","nst","gap","title","depth","felt","cdi","mmi","tsunami"]]
+    columna=[["mag","place","time","updated", "tz", "felt", "cdi", "mmi", "alert", "status", "tsunami", "sig", "net", "code", "ids", "sources", "types", "nst", "dmin", "rms", "gap", "magType", "type", "title", "long", "lat", "depth"]]
     if size>6:
         for i in range(0,6):
             if i<3:

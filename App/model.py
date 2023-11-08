@@ -197,28 +197,36 @@ def cmp_4(sig1, sig2):
         return -1
     else:
         return 0
+    
+    
 
 def req_4(data_structs, sig, gap):
     """
     Función que soluciona el requerimiento 4
     """
     # TODO: Realizar el requerimiento 4
+    #creamos el mapa que usaremos para el req 4
+    #usamos el valor "sig" como llave
     mapa = om.newMap(omaptype="RBT", cmpfunction=cmp_4)
+    #hacemos la lista donde guardaremos todos los temblores que caen en el rango
     lista = lt.newList("ARRAY_LIST")
+    #convertimos el valor de gap en float para poder compararlo mas adelante
     gap = float(gap)
+    #añadimos los datos al arbol
     for item in data_structs["temblores"]["elements"]:
         om.put(mapa, item["sig"], item)
-
+    #conseguimos la llave mas grande en el arbol
     max_key = om.maxKey(mapa)
+    #usando la llave que conseguimos antes y el minimo que nos da el usuario encontramos todas las llaves entre ellas
     keys = om.keys(mapa, sig, max_key)
-
+    #Hacemos un bloque de for donde revisamos si el gap es menor de el dado por el usuario
     for key in lt.iterator(keys):
         item = om.get(mapa, key)
         if item['value']['gap'] == '':
             item['value']['gap']  = 'Unknown'
         elif float(item["value"]["gap"])< gap:
             lt.addLast(lista, item["value"])
-    
+    #retornamos el tamaño (para la cantidad de terremotos) y la lista de datos que extraimos 
     return lt.size(lista), lista
         
 

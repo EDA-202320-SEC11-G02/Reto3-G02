@@ -153,16 +153,89 @@ def print_req_2(temblores):
                     fila=[str(temblor["time"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
                     serie= pd.Series(fila).str.wrap(15)
                     columna.append(serie)
+            else:
+                tamano_magnitud=lt.size(magnitud)
+                for i in range(1,4):
+                    temblor=lt.getElement(magnitud,i)
+                    mag=temblor["mag"]
+                    fila=[str(temblor["time"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+                    serie= pd.Series(fila).str.wrap(15)
+                    columna.append(serie)
+                for i in range(tamano_magnitud-2,tamano_magnitud+1):
+                    temblor=lt.getElement(magnitud,i)
+                    mag=temblor["mag"]
+                    fila=[str(temblor["time"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+                    serie= pd.Series(fila).str.wrap(15)
+                    columna.append(serie)
+
+            tabla=tabulate(columna,tablefmt="grid")
+            fila_2=[str(mag),str(lt.size(magnitud)),tabla]
+            serie_2=pd.Series(fila_2)
+            columna_2.append(serie_2)
+    
+    else:
+        tamano_temblores=lt.size(temblores)
+        for i in range(1,4):
+            magnitud=lt.getElement(temblores,i)
+            columna=[["time","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
+            if lt.size(magnitud)<=6:
+                for temblor in lt.iterator(magnitud):
+                    mag=temblor["mag"]
+                    fila=[str(temblor["time"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+                    serie= pd.Series(fila).str.wrap(15)
+                    columna.append(serie)
+            else:
+                tamano_magnitud=lt.size(magnitud)
+                for i in range(1,4):
+                    temblor=lt.getElement(magnitud,i)
+                    mag=temblor["mag"]
+                    fila=[str(temblor["time"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+                    serie= pd.Series(fila).str.wrap(15)
+                    columna.append(serie)
+                for i in range(tamano_magnitud-2,tamano_magnitud+1):
+                    temblor=lt.getElement(magnitud,i)
+                    mag=temblor["mag"]
+                    fila=[str(temblor["time"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+                    serie= pd.Series(fila).str.wrap(15)
+                    columna.append(serie)
+
+            tabla=tabulate(columna,tablefmt="grid")
+            fila_2=[str(mag),str(lt.size(magnitud)),tabla]
+            serie_2=pd.Series(fila_2)
+            columna_2.append(serie_2)
+        
+        for i in range(tamano_temblores-2,tamano_temblores+1):
+            magnitud=lt.getElement(temblores,i)
+            columna=[["time","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
+            if lt.size(magnitud)<=6:
+                for temblor in lt.iterator(magnitud):
+                    mag=temblor["mag"]
+                    fila=[str(temblor["time"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+                    serie= pd.Series(fila).str.wrap(15)
+                    columna.append(serie)
+            else:
+                tamano_magnitud=lt.size(magnitud)
+                for i in range(1,4):
+                    temblor=lt.getElement(magnitud,i)
+                    mag=temblor["mag"]
+                    fila=[str(temblor["time"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+                    serie= pd.Series(fila).str.wrap(15)
+                    columna.append(serie)
+                for i in range(tamano_magnitud-2,tamano_magnitud+1):
+                    temblor=lt.getElement(magnitud,i)
+                    mag=temblor["mag"]
+                    fila=[str(temblor["time"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+                    serie= pd.Series(fila).str.wrap(15)
+                    columna.append(serie)
+
             tabla=tabulate(columna,tablefmt="grid")
             fila_2=[str(mag),str(lt.size(magnitud)),tabla]
             serie_2=pd.Series(fila_2)
             columna_2.append(serie_2)
 
-        
-
-
     print(tabulate(columna_2,tablefmt="grid"))
 
+    pass
 
 
 def print_req_3(control):
@@ -215,6 +288,7 @@ def print_req_5(control):
         Función que imprime la solución del Requerimiento 5 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 5
+    
     pass
 
 

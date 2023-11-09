@@ -241,7 +241,7 @@ def req_4(data_structs, sig, gap):
     max_key = om.maxKey(mapa)
     #usando la llave que conseguimos antes y el minimo que nos da el usuario encontramos todas las llaves entre ellas
     keys = om.keys(mapa, sig, max_key)
-    merg.sort(keys, CmpSortR4)
+    keys = merg.sort(keys, CmpSortR4)
     #Hacemos un bloque de for donde revisamos si el gap es menor de el dado por el usuario
     for key in lt.iterator(keys):
         item = om.get(mapa, key)

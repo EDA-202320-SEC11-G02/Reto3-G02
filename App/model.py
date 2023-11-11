@@ -248,8 +248,21 @@ def req_5(data_structs,profundidad_minima,numero_minimo_estaciones):
     Función que soluciona el requerimiento 5
     """
     # TODO: Realizar el requerimiento 5
+    arbol=data_structs["profundidad"]
+    maximo=om.maxKey(arbol)
+    temblores_profundidad=om.values(arbol,profundidad_minima,maximo)
+    temblores_profundidad_nst=lt.newList("ARRAY_LIST")
+    for profundidad in lt.iterator(temblores_profundidad):
+        for temblor in lt.iterator(profundidad):
+            if temblor["nst"]>=numero_minimo_estaciones:
+                lt.addLast(temblores_profundidad_nst,temblor)
+    sorted_list=merg.sort(temblores_profundidad_nst,cmp_temblores_by_fecha_and_magnitud)
+    if lt.size(sorted_list)>20:
+        top_20=lt.subList(sorted_list,1,numelem=20)
+    else:
+        top_20=sorted_list
+    return top_20
     
-    pass
 
 
 def req_6(data_structs):
@@ -293,7 +306,19 @@ def cmp_temblores_by_fecha(resultado1,resultado2):
         return False
     elif date_1>date_2:
         return True
-
+    
+def cmp_temblores_by_fecha_and_magnitud(resultado1,resultado2):
+    date_1=d.strptime(resultado1["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    date_2=d.strptime(resultado2["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    if date_1<date_2:
+        return False
+    elif date_1>date_2:
+        return True
+    elif date_1==date_2:
+        if resultado1["mag"]<=resultado2["mag"]:
+            return False
+        else:
+            return True 
 # Funciones de ordenamiento
 
 

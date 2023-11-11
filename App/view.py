@@ -289,7 +289,8 @@ def print_req_5(control):
     """
     # TODO: Imprimir el resultado del requerimiento 5
     
-    pass
+    
+    
 
 
 def print_req_6(control):
@@ -361,7 +362,14 @@ if __name__ == "__main__":
             print_req_4(control)
 
         elif int(inputs) == 6:
+            profundidad_minima=float(input("Ingrese la profundidad minima: "))
+            num_min_estaciones=int(input("Ingrese el numero minimo de estaciones: "))
+            top_20=controller.req_5(control,profundidad_minima,num_min_estaciones)
+            print("=====Req  No 2 inputs====")
+            print("Min depth",profundidad_minima)
+
             print_req_5(control)
+
 
         elif int(inputs) == 7:
             print_req_6(control)

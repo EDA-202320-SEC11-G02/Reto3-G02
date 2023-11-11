@@ -115,12 +115,13 @@ def req_4(control, sig, gap):
     return model.req_4(control["model"], sig, gap)
 
 
-def req_5(control):
+def req_5(control,profundidad_minima,numero_minimo_estaciones):
     """
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
-    pass
+    respuesta=model.req_5(control["model"],profundidad_minima, numero_minimo_estaciones)
+    return respuesta
 
 def req_6(control):
     """

@@ -210,6 +210,16 @@ def cmp_4(sig1, sig2):
     else:
         return 0
     
+def CmpSortR4(item1, item2):
+    
+    sig1 = int(item1)
+    sig2 = int(item2)
+
+    if sig1>sig2:
+        return True
+    else:
+        return False
+    
     
 
 def req_4(data_structs, sig, gap):
@@ -231,10 +241,11 @@ def req_4(data_structs, sig, gap):
     max_key = om.maxKey(mapa)
     #usando la llave que conseguimos antes y el minimo que nos da el usuario encontramos todas las llaves entre ellas
     keys = om.keys(mapa, sig, max_key)
+    keys = merg.sort(keys, CmpSortR4)
     #Hacemos un bloque de for donde revisamos si el gap es menor de el dado por el usuario
     for key in lt.iterator(keys):
         item = om.get(mapa, key)
-        if item['value']['gap'] == '':
+        if item['value']['gap'] == '' or item["value"]["gap"] =="Unkown":
             item['value']['gap']  = 'Unknown'
         elif float(item["value"]["gap"])< gap:
             lt.addLast(lista, item["value"])

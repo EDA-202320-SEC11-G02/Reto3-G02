@@ -262,8 +262,8 @@ def print_req_4(control):
             if i<3:
                 lt.addLast(final, data["elements"][i])
             else: 
-                x = i-3
-                lt.addLast(final,data["elements"][x])
+                x = 6-i
+                lt.addLast(final,data["elements"][size-1-x])
     else:
         final = data
         

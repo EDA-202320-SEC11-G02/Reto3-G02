@@ -283,11 +283,82 @@ def print_req_4(control):
     print(tabulate(columna, tablefmt="grid"))
 
 
-def print_req_5(control):
+def print_req_5(temblores):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 5
+    # TODO: Imprimir el resultado del requerimiento 5  
+    columna_2=[["time","events","details"]]
+
+    if lt.size(temblores)<=6:
+        for i in range(1,lt.size(temblores)):
+           
+            temblor=lt.getElement(temblores,i)
+            time=temblor["time"]
+            fila=[str(temblor["mag"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+            serie= pd.Series(fila).str.wrap(15)
+            if i ==1:
+                contador=1
+                columna=[["mag","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
+                columna.append(serie)
+            else:
+                temblor_anterior=lt.getElement(temblores,i-1)
+                if temblor_anterior["time"]==temblor["time"]:
+                    columna.append(serie)
+                    contador+=1
+                else:
+                    tabla=tabulate(columna,tablefmt="grid")
+                    fila_2=[str(temblor_anterior["time"]),str(contador),tabla]
+                    serie_2=pd.Series(fila_2)
+                    columna_2.append(serie_2)
+                    columna=[["mag","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
+                    contador=1
+                    columna.append(serie)
+            if i == lt.size(temblores):
+                tabla=tabulate(columna,tablefmt="grid")
+                fila_2=[str(time),str(contador),tabla]
+                serie_2=pd.Series(fila_2)
+                columna_2.append(serie_2)
+
+
+        
+    
+    else:
+        tamano_temblores=lt.size(temblores)
+        indices=[1,2,3,tamano_temblores-2,tamano_temblores-1,tamano_temblores]
+        for i in indices:
+            temblor=lt.getElement(temblores,i)
+            time=temblor["time"]
+            fila=[str(temblor["mag"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
+            serie= pd.Series(fila).str.wrap(15)
+            if i ==1:
+                contador=1
+                columna=[["mag","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
+                columna.append(serie)
+            else:
+                temblor_anterior=lt.getElement(temblores,i-1)
+                if temblor_anterior["time"]==temblor["time"]:
+                    columna.append(serie)
+                    contador+=1
+                else:
+                    tabla=tabulate(columna,tablefmt="grid")
+                    fila_2=[str(temblor_anterior["time"]),str(contador),tabla]
+                    serie_2=pd.Series(fila_2)
+                    columna_2.append(serie_2)
+                    columna=[["mag","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
+                    contador=1
+                    columna.append(serie)
+
+            if i == tamano_temblores:
+                tabla=tabulate(columna,tablefmt="grid")
+                fila_2=[str(time),str(contador),tabla]
+                serie_2=pd.Series(fila_2)
+                columna_2.append(serie_2)
+
+
+    print(tabulate(columna_2,tablefmt="grid"))
+
+
     
     
     
@@ -364,11 +435,15 @@ if __name__ == "__main__":
         elif int(inputs) == 6:
             profundidad_minima=float(input("Ingrese la profundidad minima: "))
             num_min_estaciones=int(input("Ingrese el numero minimo de estaciones: "))
-            top_20=controller.req_5(control,profundidad_minima,num_min_estaciones)
+            top_20,fechas,tamano_sorted_list=controller.req_5(control,profundidad_minima,num_min_estaciones)
             print("=====Req  No 2 inputs====")
             print("Min depth",profundidad_minima)
-
-            print_req_5(control)
+            print("=====Req No.5 Results=====")
+            print("Total different dates:",fechas)
+            print("Total events between dates:",tamano_sorted_list)
+            print("Selecting the first 20 results...:")
+            print_req_5(top_20)
+            
 
 
         elif int(inputs) == 7:

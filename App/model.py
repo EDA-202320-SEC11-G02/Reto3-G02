@@ -263,16 +263,20 @@ def req_5(data_structs,profundidad_minima,numero_minimo_estaciones):
     maximo=om.maxKey(arbol)
     temblores_profundidad=om.values(arbol,profundidad_minima,maximo)
     temblores_profundidad_nst=lt.newList("ARRAY_LIST")
+    fechas=lt.newList("ARRAY_LIST")
     for profundidad in lt.iterator(temblores_profundidad):
         for temblor in lt.iterator(profundidad):
-            if temblor["nst"]>=numero_minimo_estaciones:
-                lt.addLast(temblores_profundidad_nst,temblor)
+            if temblor["nst"]!="":
+                if float(temblor["nst"])>=numero_minimo_estaciones:
+                    lt.addLast(temblores_profundidad_nst,temblor)
+                    if lt.isPresent(fechas,temblor["time"])==False:
+                        lt.addLast(fechas,temblor["time"])
     sorted_list=merg.sort(temblores_profundidad_nst,cmp_temblores_by_fecha_and_magnitud)
     if lt.size(sorted_list)>20:
         top_20=lt.subList(sorted_list,1,numelem=20)
     else:
         top_20=sorted_list
-    return top_20
+    return top_20,lt.size(fechas),lt.size(sorted_list)
     
 
 

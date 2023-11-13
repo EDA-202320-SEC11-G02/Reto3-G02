@@ -141,11 +141,12 @@ def print_req_2(temblores):
         Función que imprime la solución del Requerimiento 2 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 2
-    lista=[1,2,3,lt.size(temblores)-2,lt.size(temblores)-1,lt.size(temblores)]   
+   
     columna_2=[["mag","events","details"]]
 
     if lt.size(temblores)<=6:
-        for magnitud  in lt.iterator(temblores):
+        for i  in range(lt.size(temblores),0,-1):
+            magnitud=lt.getElement(temblores,i)
             columna=[["time","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
             if lt.size(magnitud)<=6:
                 for temblor in lt.iterator(magnitud):
@@ -175,7 +176,8 @@ def print_req_2(temblores):
     
     else:
         tamano_temblores=lt.size(temblores)
-        for i in range(1,4):
+        
+        for i in range(tamano_temblores,tamano_temblores-3,-1):
             magnitud=lt.getElement(temblores,i)
             columna=[["time","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
             if lt.size(magnitud)<=6:
@@ -203,8 +205,8 @@ def print_req_2(temblores):
             fila_2=[str(mag),str(lt.size(magnitud)),tabla]
             serie_2=pd.Series(fila_2)
             columna_2.append(serie_2)
-        
-        for i in range(tamano_temblores-2,tamano_temblores+1):
+
+        for i in range(3,0,-1):
             magnitud=lt.getElement(temblores,i)
             columna=[["time","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
             if lt.size(magnitud)<=6:
@@ -326,17 +328,17 @@ def print_req_5(temblores):
     else:
         tamano_temblores=lt.size(temblores)
         indices=[1,2,3,tamano_temblores-2,tamano_temblores-1,tamano_temblores]
-        for i in indices:
-            temblor=lt.getElement(temblores,i)
+        for i in range(len(indices)):
+            temblor=lt.getElement(temblores,indices[i])
             time=temblor["time"]
             fila=[str(temblor["mag"]),temblor["lat"],str(temblor["long"]),str(temblor["depth"]),str(temblor["sig"]),temblor["gap"], str(temblor["nst"]), temblor["title"], temblor["cdi"], temblor["mmi"], str(temblor["magType"]), temblor["type"], temblor["code"]]
             serie= pd.Series(fila).str.wrap(15)
-            if i ==1:
+            if indices[i] ==1:
                 contador=1
                 columna=[["mag","lat","long","depth","sig","gap","nst","title","cdi","mmi","magType","type","code"]]
                 columna.append(serie)
             else:
-                temblor_anterior=lt.getElement(temblores,i-1)
+                temblor_anterior=lt.getElement(temblores,indices[i-1])
                 if temblor_anterior["time"]==temblor["time"]:
                     columna.append(serie)
                     contador+=1
@@ -349,7 +351,7 @@ def print_req_5(temblores):
                     contador=1
                     columna.append(serie)
 
-            if i == tamano_temblores:
+            if indices[i] == tamano_temblores:
                 tabla=tabulate(columna,tablefmt="grid")
                 fila_2=[str(time),str(contador),tabla]
                 serie_2=pd.Series(fila_2)
@@ -443,6 +445,8 @@ if __name__ == "__main__":
             print("Total events between dates:",tamano_sorted_list)
             print("Selecting the first 20 results...:")
             print_req_5(top_20)
+            #for temblor in lt.iterator(top_20):
+                #print(temblor)
             
 
 

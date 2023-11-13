@@ -51,12 +51,15 @@ def load_data(control):
     Carga los datos del reto
     """
     # TODO: Realizar la carga de datos
+    startime = get_time()
     temblores_file = "Data/Challenge-3/earthquakes/temblores-utf8-small.csv"
     file = csv.DictReader(open(temblores_file, encoding='utf8'))
     
     for data in file:
         model.add_data(control["model"],data)
-    
+    endtime = get_time()
+    delta = delta_time(startime, endtime) 
+    print(delta)
     return model.data_size(control["model"]['temblores'])
     
 

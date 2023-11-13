@@ -75,7 +75,18 @@ def add_data(data_structs, data):
     """
     #TODO: Crear la función para agregar elementos a una lista
     lista = data_structs['temblores']
+    if data["nst"]=="":
+        data["nst"]= 1
+    if int(data["tsunami"])==0:
+        data["tsunami"]="False"
+    if data["cdi"]=="":
+        data["cdi"]="Unavailable"
+    if data["mmi"]=="":
+        data["mmi"]="Unavailable"
+    if data["gap"]=="":
+        data["gap"]=0.0
     lt.addLast(lista,data)
+
 
     mapa_magnitud=data_structs["magnitud"]
     magnitud=float(data["mag"])

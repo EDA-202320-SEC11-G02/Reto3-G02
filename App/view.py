@@ -417,13 +417,14 @@ def print_req_7(control):
     
     headers = ["time", "lat", "long", "title", "code", "mag"]
     ax2.set_axis_off()
-    ax2.set_title(f"Event details in {title} in {anio}")
+    
     table = ax2.table(cellText=array, 
                       cellLoc="center",
                       colLabels=headers,
                       colLoc="center", 
                       loc="bottom",
                       colWidths = [0.15, 0.15, 0.15, 0.3, 0.1, 0.1])
+    ax2.set_title(f"Event details in {title} in {anio}", fontweight = "bold", fontsize=14)
     table.scale(1,2)
     table.auto_set_font_size(False)
     table.set_fontsize(10)

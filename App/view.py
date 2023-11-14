@@ -32,6 +32,7 @@ assert cf
 from tabulate import tabulate
 import traceback
 import pandas as pd
+import matplotlib.pyplot as plt
 
 """
 La vista se encarga de la interacción con el usuario
@@ -379,7 +380,46 @@ def print_req_7(control):
         Función que imprime la solución del Requerimiento 7 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    anio = input("Ingrese el año de interes: ")
+    title = input("Ingrese el titulo de la regíon en la que desea buscar: ")
+    prop = input("Ingrese la propiedad que desea contar (sig: significancia, mag: magnitud, depth: profundidad): ")
+    data = controller.req_7(control, anio, title, prop)
+    print(f"La cantidad de datos es: {lt.size(data)}")
+    num_bins = int(input("Elija la cantidad de bins que desea: ")) +1
+    
+    p_list = lt.newList("ARRAY_LIST")
+    d_list = lt.newList("ARRAY_LIST")
+    
+    for x in lt.iterator(data):
+        lt.addLast(p_list, x[prop])
+        lt.addLast(d_list, x["time"])
+    
+    size = (lt.size(p_list)-1)
+    bin_limits = []
+    min = p_list["elements"][0]
+    min = (float(min))
+    max = (p_list["elements"][size])
+    max = (float(max))
+    interval = (max-min)/num_bins
+    for k in range(1, num_bins+1):
+        if k == 1:
+            val = min
+        elif k== num_bins+1:
+            val = max
+        else:
+            val = round(min+k*interval,2)
+        
+        bin_limits.append(val)
+        
+    #bin_limits = [3,4,5]
+    plt.hist(p_list["elements"], bins = num_bins, color="purple", histtype="bar", rwidth=0.8, align="mid")
+    plt.title(f"Histogram of {prop} in {title} \n\n", fontweight="bold", fontsize=14)
+    plt.ylabel("No. of events")
+    plt.xlabel(f"{prop}")
+    plt.show()
+    
+    
+    
 
 
 def print_req_8(control):

@@ -33,6 +33,7 @@ from tabulate import tabulate
 import traceback
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 """
 La vista se encarga de la interacción con el usuario
@@ -385,38 +386,58 @@ def print_req_7(control):
     prop = input("Ingrese la propiedad que desea contar (sig: significancia, mag: magnitud, depth: profundidad): ")
     data = controller.req_7(control, anio, title, prop)
     print(f"La cantidad de datos es: {lt.size(data)}")
-    num_bins = int(input("Elija la cantidad de bins que desea: ")) +1
+    num_bins = int(input("Elija la cantidad de bins que desea: "))
     
     p_list = lt.newList("ARRAY_LIST")
-    d_list = lt.newList("ARRAY_LIST")
     
     for x in lt.iterator(data):
         lt.addLast(p_list, x[prop])
-        lt.addLast(d_list, x["time"])
-    
-    size = (lt.size(p_list)-1)
-    bin_limits = []
-    min = p_list["elements"][0]
-    min = (float(min))
-    max = (p_list["elements"][size])
-    max = (float(max))
-    interval = (max-min)/num_bins
-    for k in range(1, num_bins+1):
-        if k == 1:
-            val = min
-        elif k== num_bins+1:
-            val = max
-        else:
-            val = round(min+k*interval,2)
         
-        bin_limits.append(val)
+    fig, (ax1, ax2) = plt.subplots(2)
         
-    #bin_limits = [3,4,5]
-    plt.hist(p_list["elements"], bins = num_bins, color="purple", histtype="bar", rwidth=0.8, align="mid")
-    plt.title(f"Histogram of {prop} in {title} \n\n", fontweight="bold", fontsize=14)
+    hist = ax1.hist(p_list["elements"], bins = num_bins, color="purple", histtype="bar", rwidth=0.8, align="mid", edgecolor="black")
+    ax1.set_title(f"Histogram of {prop} in {title} \n\n", fontweight="bold", fontsize=14)
     plt.ylabel("No. of events")
     plt.xlabel(f"{prop}")
+    plt.grid(visible= True, axis = "y", linestyle = "-", alpha = 0.7)
+    
+    size = lt.size(data)-1
+    
+    array = []
+    for i in range(0,6):
+        if i <3:
+            item = data["elements"][i]
+        else:
+            k = 6-1
+            item = data["elements"][size-k]
+        row = [str(item["time"][:16]), str(item["lat"]), str(item["long"]), str(item["title"]), str(item["code"]), str(item["mag"])]
+        array.append(row)
+        
+    
+    
+    headers = ["time", "lat", "long", "title", "code", "mag"]
+    ax2.set_axis_off()
+    ax2.set_title(f"Event details in {title} in {anio}")
+    table = ax2.table(cellText=array, 
+                      cellLoc="center",
+                      colLabels=headers,
+                      colLoc="center", 
+                      loc="bottom",
+                      colWidths = [0.15, 0.15, 0.15, 0.3, 0.1, 0.1])
+    table.scale(1,2)
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    plt.subplots_adjust(bottom=0.373, hspace=0)
+    
+
+    
     plt.show()
+    
+    
+    
+    
+        
+    
     
     
     

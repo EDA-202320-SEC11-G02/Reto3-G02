@@ -52,7 +52,7 @@ def load_data(control):
     """
     # TODO: Realizar la carga de datos
     startime = get_time()
-    temblores_file = "Data/Challenge-3/earthquakes/temblores-utf8-large.csv"
+    temblores_file = "Data/Challenge-3/earthquakes/temblores-utf8-small.csv"
     file = csv.DictReader(open(temblores_file, encoding='utf8'))
     
     for data in file:
@@ -102,12 +102,16 @@ def req_2(control,lower_mag,upper_mag):
     return respuesta
 
 
-def req_3(control):
+def req_3(control, min_magnitude, max_depht):
     """
     Retorna el resultado del requerimiento 3
     """
     # TODO: Modificar el requerimiento 3
-    pass
+    start_time = get_time()
+    x = model.req_3(control['model'], min_magnitude, max_depht)
+    end_time = get_time()
+    delta = delta_time(start_time, end_time)
+    return x, delta
 
 
 def req_4(control, sig, gap):

@@ -247,8 +247,8 @@ def print_req_3(control):
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
-    pass
-
+    lower_mag=float(input('Ingrese el limite inferior de la magnitud: '))
+    upper_mag=float(input('Ingrese el limite superior de la magnitud: '))
 
 def print_req_4(control):
     """

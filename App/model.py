@@ -110,7 +110,7 @@ def add_data(data_structs, data):
         lt.addLast(profundidad_search,data)
         om.put(mapa_profundidad,profundidad,profundidad_search)
     return data_structs
-
+    
 
 # Funciones para creacion de datos
 
@@ -226,13 +226,25 @@ def req_2(data_structs,lower_mag,upper_mag):
     return temblores_filtrados,contador
 
 
-def req_3(data_structs):
+def req_3(analyzer,min_magnitude,max_depth):
+    eventos_filtrados = lt.newList('ARRAY_LIST')
+    for evento in lt.iterator(analyzer['earthquakes']):
+        if ( evento['mag'] >= min_magnitude and evento['depth'] <= max_depth):
+            lt.addLast(eventos_filtrados,evento)
+    eventos_filtrados= merg.sort(eventos_filtrados, compare)
+    eventos_resultado = lt.subList(eventos_filtrados, 1, 10)
+    return eventos_resultado
+    
+def compare(lt1, lt2):
     """
-    Función que soluciona el requerimiento 3
+    Función encargada de comparar dos datos
     """
-    # TODO: Realizar el requerimiento 3
-    pass
-
+    #TODO: Crear función comparadora de la lista
+    if lt1['time'] > lt2['time']:
+        return True
+    else:
+        return False
+ 
 def cmp_4(sig1, sig2):
     sig1 = int(sig1)
     sig2 = int(sig2)

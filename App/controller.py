@@ -123,11 +123,11 @@ def req_3(control, min_magnitude, max_depht):
     Retorna el resultado del requerimiento 3
     """
     # TODO: Modificar el requerimiento 3
-    start_time = get_time()
-    x = model.req_3(control['model'], min_magnitude, max_depht)
-    end_time = get_time()
-    delta = delta_time(start_time, end_time)
-    return x, delta
+    start_time= get_time()
+    lista_p3_u3,lista=model.req_3(control['model'],min_magnitude, max_depht)
+    end_time= get_time()
+    delta= delta_time(start_time, end_time)
+    return lista_p3_u3,lista, delta
 
 
 def req_4(control, sig, gap):
@@ -150,12 +150,16 @@ def req_5(control,profundidad_minima,numero_minimo_estaciones):
     respuesta=model.req_5(control["model"],profundidad_minima, numero_minimo_estaciones)
     return respuesta
 
-def req_6(control):
+def req_6(catalog, startDate, endDate, focusLatitude, focusLongitude, radio, numberOfImportantEvents):
     """
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
-    pass
+    start_time = get_time()
+    x = model.req_6(catalog, startDate, endDate, focusLatitude, focusLongitude, radio, numberOfImportantEvents)
+    end_time = get_time()
+    delta = delta_time(start_time, end_time)
+    return x, delta
 
 
 def req_7(control, anio, title, prop):

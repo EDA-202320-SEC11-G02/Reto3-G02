@@ -248,8 +248,18 @@ def print_req_3(control):
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
-    lower_mag=float(input('Ingrese el limite inferior de la magnitud: '))
-    upper_mag=float(input('Ingrese el limite superior de la magnitud: '))
+    min_magnitude=float(input("Ingrese la magnitud minima: "))
+    max_depth=float(input("Ingrese la profundidad maxima: "))
+    lista_p3_u3,lista,tiempo = controller.req_3(control, min_magnitude, max_depth)
+    print("------REQ 3 RESULTS------")
+    print("Total events diferent magnitudes: " + str(lt.size(lista)))
+    print(f"Selecting {lt.size(lista)}...")
+    if lt.size(lista) > 6:
+        print("Results struct has more than 6 records...\n")
+    else:
+        print("Results struct has less than 6 records...\n")
+    print("Tiempo de ejecución: "+str(tiempo))
+    print(tabulate(lista_p3_u3['elements'], headers="keys", tablefmt='fancy_grid'))
 
 def print_req_4(control):
     """

@@ -43,6 +43,7 @@ import datetime as dt
 from datetime import datetime as d
 assert cf
 import math
+from tabulate import tabulate
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá
 dos listas, una para los videos, otra para las categorias de los mismos.
@@ -233,7 +234,16 @@ def req_3(analyzer,min_magnitude,max_depth):
             lt.addLast(eventos_filtrados,evento)
     eventos_filtrados= merg.sort(eventos_filtrados, compare)
     eventos_resultado = lt.subList(eventos_filtrados, 1, 10)
-    return eventos_resultado
+    lista_p3_u3 = lt.newList("ARRAY_LIST")
+    if lt.size(eventos_resultado) < 6:
+        return eventos_resultado
+    else:
+        for i in range(3):
+            lt.addFirst(lista_p3_u3, eventos_resultado["elements"][i])
+        tamaño = lt.size(eventos_resultado)
+        for i in range(tamaño - 3, tamaño):
+            lt.addFirst(lista_p3_u3, eventos_resultado["elements"][i])
+    return lista_p3_u3,eventos_resultado
     
 def compare(lt1, lt2):
     """
@@ -474,11 +484,7 @@ def req_6(catalog, startDate, endDate, focusLatitude, focusLongitude, radio, num
                 'details': tabulate(lt.iterator(details), headers="keys", tablefmt="grid", numalign= "left")}
         lt.addLast(eventsFound, info)
         
-        
-    if lt.size(eventsFound) > 6:
-        eventsFound = getFirstAndLast3(eventsFound)
-        
-    return maxEventReturn, eventsFound, numberOfEvents, totalDates, totalEventsBetweenDates, code, postN, preN
+    return maxEventReturn, eventsFound, numberOfEvents, totalDates, totalEventsBetweenDates, code,postN, preN
 
 
 

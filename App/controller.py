@@ -30,6 +30,19 @@ import tracemalloc
 El controlador se encarga de mediar entre la vista y el modelo.
 """
 
+def getTime():
+    """
+    devuelve el instante tiempo de procesamiento en milisegundos
+    """
+    return float(time.perf_counter()*1000)
+
+
+def deltaTime(end, start):
+    """
+    devuelve la diferencia entre tiempos de procesamiento muestreados
+    """
+    elapsed = float(end - start)
+    return elapsed
 
 def new_controller():
     """
@@ -52,7 +65,7 @@ def load_data(control):
     """
     # TODO: Realizar la carga de datos
     startime = get_time()
-    temblores_file = "Data/Challenge-3/earthquakes/temblores-utf8-small.csv"
+    temblores_file = "Data/Challenge-3/earthquakes/temblores-utf8-large.csv"
     file = csv.DictReader(open(temblores_file, encoding='utf8'))
     
     for data in file:
@@ -89,8 +102,11 @@ def req_1(control, ini_date, fin_date):
     Retorna el resultado del requerimiento 1
     """
     # TODO: Modificar el requerimiento 1
+    start_time = getTime()
     cantidad, lista = model.req_1(control["model"], ini_date, fin_date)
-    return cantidad, lista
+    end_time = getTime()
+    dif = delta_time(start_time, end_time)
+    return cantidad, lista, dif
 
 
 def req_2(control,lower_mag,upper_mag):
@@ -119,7 +135,11 @@ def req_4(control, sig, gap):
     Retorna el resultado del requerimiento 4
     """
     # TODO: Modificar el requerimiento 4
-    return model.req_4(control["model"], sig, gap)
+    start = getTime()
+    data = model.req_4(control["model"], sig, gap)
+    end = getTime()
+    
+    return data, delta_time(start, end)
 
 
 def req_5(control,profundidad_minima,numero_minimo_estaciones):
@@ -143,8 +163,10 @@ def req_7(control, anio, title, prop):
     Retorna el resultado del requerimiento 7
     """
     # TODO: Modificar el requerimiento 7
-    return model.req_7(control["model"], anio, title, prop)
-
+    start = getTime()
+    data = model.req_7(control["model"], anio, title, prop)
+    end = getTime()
+    return data, delta_time(start, end)
 
 def req_8(control):
     """

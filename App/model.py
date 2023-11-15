@@ -297,7 +297,7 @@ def req_4(data_structs, sig, gap):
         elif float(item["value"]["gap"])< gap:
             lt.addLast(lista, item["value"])
     #retornamos el tamaño (para la cantidad de terremotos) y la lista de datos que extraimos 
-    return lt.size(lista), lista
+    return lista
         
 
 

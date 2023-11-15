@@ -42,7 +42,7 @@ from DISClib.Algorithms.Sorting import quicksort as quk
 import datetime as dt
 from datetime import datetime as d
 assert cf
-
+import math
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá
 dos listas, una para los videos, otra para las categorias de los mismos.
@@ -327,12 +327,158 @@ def req_5(data_structs,profundidad_minima,numero_minimo_estaciones):
     
 
 
-def req_6(data_structs):
+def req_6(catalog, startDate, endDate, focusLatitude, focusLongitude, radio, numberOfImportantEvents):
     """
     Función que soluciona el requerimiento 6
-    """
+    
     # TODO: Realizar el requerimiento 6
-    pass
+    """
+    datesIndex = catalog['datesIndex']
+    radio_tierra = 6371
+    startDate = d.strptime(startDate, "%Y-%m-%dT%H:%M:%S.%fZ")
+    endDate = d.strptime(endDate, "%Y-%m-%dT%H:%M:%S.%fZ")
+    lon2 = focusLongitude
+    lat2 = focusLatitude
+    eventsList = om.values(datesIndex, startDate.strftime("%Y-%m-%d %H:%M:%S"), endDate.strftime("%Y-%m-%d %H:%M:%S"))
+    eventsWithinRadious = lt.newList("ARRAY_LIST")
+    for list in lt.iterator(eventsList):
+        for event in lt.iterator(list):
+            
+            lon1 = float(event["long"])
+            lat1 = float(event["lat"])
+            
+            lat1_rad = math.radians(lat1)
+            lon1_rad = math.radians(lon1)
+            lat2_rad = math.radians(lat2)
+            lon2_rad = math.radians(lon2)
+            
+            dlat = lat2_rad - lat1_rad
+            dlon = lon2_rad - lon1_rad
+            
+            a = math.sin(dlat / 2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2)**2
+            c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+            
+            distancia = radio_tierra * c
+            
+            if distancia < radio:
+                time = d.strptime(event['time'], "%Y-%m-%dT%H:%M:%S.%fZ")
+                info = {'time': time.strftime("%Y-%m-%dT%H:%M"),
+                        'mag': "%.3f" % float(event['mag']),
+                        'lat': "%.3f" % float(event['lat']),
+                        'long': "%.3f" % float(event['long']),
+                        'depth': "%.3f" % float(event['depth']),
+                        'sig': int(event['sig']),
+                        'gap': 0.0 if event['gap'] == "" else float(event['gap']),
+                        'distance': float(round(distancia, 2)),
+                        'nst': 1 if event['nst'] == "" else float(event['nst']),
+                        'title': event['title'],
+                        'cdi': 'Unavailable' if event['cdi'] == "" else float(event['cdi']),
+                        'mmi': 'Unavailable' if event['mmi'] == "" else float(event['mmi']),
+                        'magType': event['magType'],
+                        'type': event['type'],
+                        'code': event['code']
+                        }
+                lt.addLast(eventsWithinRadious, info)
+                
+                
+    numberOfEvents = lt.size(eventsWithinRadious)             
+    maxSig = 0
+    maxEvent = None
+    i = 0
+    for event in lt.iterator(eventsWithinRadious):
+        i += 1
+        if float(event["sig"]) > maxSig:
+            maxSig = float(event["sig"])
+            maxEvent = event
+            posMaxSig = i
+            
+    maxEventReturn = lt.newList("ARRAY_LIST")
+    lt.addLast(maxEventReturn, maxEvent)         
+    
+    if (posMaxSig + numberOfImportantEvents) < lt.size(eventsWithinRadious):
+        eventsAfter = lt.subList(eventsWithinRadious, posMaxSig, numberOfImportantEvents + 1)
+    else:
+        eventsAfter = lt.subList(eventsWithinRadious, posMaxSig, (lt.size(eventsWithinRadious) - posMaxSig) + 1)
+    
+    if (posMaxSig - numberOfImportantEvents) > 1:
+        eventsBefore = lt.subList(eventsWithinRadious, posMaxSig - numberOfImportantEvents, numberOfImportantEvents)
+    else:
+        eventsBefore = lt.subList(eventsWithinRadious, 1, posMaxSig - 1)
+        
+    postN = lt.size(eventsBefore)
+    preN = lt.size(eventsAfter) - 1
+    code = maxEvent['code']
+    
+    eventsFoundIndex = om.newMap('RBT')    
+    
+    for event in lt.iterator(eventsBefore):
+        entry = om.get(eventsFoundIndex, event['time'])
+        if entry == None:
+            list = lt.newList("ARRAY_LIST") 
+        else:
+            list = me.getValue(entry)
+        info = {'mag': event['mag'],
+                'lat': event['lat'],
+                'long': event['long'],
+                'depth': event['depth'],
+                'sig': event['sig'],
+                'gap': event['gap'],
+                'distance': event['distance'],
+                'nst': event['nst'],
+                'title': event['title'],
+                'cdi': event['cdi'],
+                'mmi': event['mmi'],
+                'magType': event['magType'],
+                'type': event['type'],
+                'code': event['code']
+                }
+        lt.addLast(list, info)
+        om.put(eventsFoundIndex, event['time'], list)
+        
+    for event in lt.iterator(eventsAfter):
+        entry = om.get(eventsFoundIndex, event['time'])
+        if entry == None:
+            list = lt.newList("ARRAY_LIST") 
+        else:
+            list = me.getValue(entry)
+        info = {'mag': event['mag'],
+                'lat': event['lat'],
+                'long': event['long'],
+                'depth': event['depth'],
+                'sig': event['sig'],
+                'gap': event['gap'],
+                'distance': event['distance'],
+                'nst': event['nst'],
+                'title': event['title'],
+                'cdi': event['cdi'],
+                'mmi': event['mmi'],
+                'magType': event['magType'],
+                'type': event['type'],
+                'code': event['code']
+                }
+        lt.addLast(list, info)
+        om.put(eventsFoundIndex, event['time'], list)
+        
+    datesList = om.keySet(eventsFoundIndex)
+    totalDates = lt.size(datesList)
+    totalEventsBetweenDates = 0
+    
+    eventsFound = lt.newList("ARRAY_LIST")
+    
+    for date in lt.iterator(datesList):
+        entry = om.get(eventsFoundIndex, date)
+        details = me.getValue(entry)
+        totalEventsBetweenDates += lt.size(eventsFound)
+        info = {'time': date,
+                'events': lt.size(details),
+                'details': tabulate(lt.iterator(details), headers="keys", tablefmt="grid", numalign= "left")}
+        lt.addLast(eventsFound, info)
+        
+        
+    if lt.size(eventsFound) > 6:
+        eventsFound = getFirstAndLast3(eventsFound)
+        
+    return maxEventReturn, eventsFound, numberOfEvents, totalDates, totalEventsBetweenDates, code, postN, preN
 
 
 

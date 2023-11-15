@@ -386,7 +386,7 @@ def print_req_6(control):
         Función que imprime la solución del Requerimiento 6 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    anio = input("Ingrese el año de interes: ")
 
 
 def print_req_7(control):

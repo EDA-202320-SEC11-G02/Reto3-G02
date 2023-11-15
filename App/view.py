@@ -385,8 +385,12 @@ def print_req_7(control):
     title = input("Ingrese el titulo de la regíon en la que desea buscar: ")
     prop = input("Ingrese la propiedad que desea contar (sig: significancia, mag: magnitud, depth: profundidad): ")
     data = controller.req_7(control, anio, title, prop)
-    print(f"La cantidad de datos es: {lt.size(data)}")
     num_bins = int(input("Elija la cantidad de bins que desea: "))
+    
+    size = lt.size(data)-1
+    print(f"La cantidad de datos es: {lt.size(data)}")
+    print(f"El dato mas pequeño de {prop} es: {data['elements'][0][prop]}")
+    print(f"El dato mas grande de {prop} es: {data['elements'][size][prop]}")
     
     p_list = lt.newList("ARRAY_LIST")
     
@@ -400,8 +404,6 @@ def print_req_7(control):
     plt.ylabel("No. of events")
     plt.xlabel(f"{prop}")
     plt.grid(visible= True, axis = "y", linestyle = "-", alpha = 0.7)
-    
-    size = lt.size(data)-1
     
     array = []
     for i in range(0,6):
@@ -424,7 +426,6 @@ def print_req_7(control):
                       colLoc="center", 
                       loc="bottom",
                       colWidths = [0.15, 0.15, 0.15, 0.3, 0.1, 0.1])
-    ax2.set_title(f"Event details in {title} in {anio}", fontweight = "bold", fontsize=14)
     table.scale(1,2)
     table.auto_set_font_size(False)
     table.set_fontsize(10)

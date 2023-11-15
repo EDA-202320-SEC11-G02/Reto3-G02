@@ -32,9 +32,9 @@ This repository is part of the data structure and algorithms (#EDA) teaching fra
 
 The students edit this section to add their names, Uniandes emails, and specify which project functionality of the project they will implement.
 
-1. Andres Ignacio Tello Umerez, a.tellou@uniandes.edu.co, 202223807.
-1. Emile Bottagisio,e.bottagisio@uniandes.edu.co,202223504.
-1. Juan Esteban Guzman , je.guzman2@uniandes.edu.co, 202313334
+1. Andres Ignacio Tello Umerez, a.tellou@uniandes.edu.co, 202223807, req 1, req 4, req 7
+1. Emile Bottagisio,e.bottagisio@uniandes.edu.co,202223504, req 2, req 5
+1. Juan Esteban Guzman , je.guzman2@uniandes.edu.co, 202313334, req 3, req 6
 
 [Back to top](#challenge-template)
 

@@ -32,6 +32,8 @@ assert cf
 from tabulate import tabulate
 import traceback
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 
 """
 La vista se encarga de la interacción con el usuario
@@ -379,7 +381,67 @@ def print_req_7(control):
         Función que imprime la solución del Requerimiento 7 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    anio = input("Ingrese el año de interes: ")
+    title = input("Ingrese el titulo de la regíon en la que desea buscar: ")
+    prop = input("Ingrese la propiedad que desea contar (sig: significancia, mag: magnitud, depth: profundidad): ")
+    data = controller.req_7(control, anio, title, prop)
+    print(f"La cantidad de datos es: {lt.size(data)}")
+    num_bins = int(input("Elija la cantidad de bins que desea: "))
+    
+    p_list = lt.newList("ARRAY_LIST")
+    
+    for x in lt.iterator(data):
+        lt.addLast(p_list, x[prop])
+        
+    fig, (ax1, ax2) = plt.subplots(2)
+        
+    hist = ax1.hist(p_list["elements"], bins = num_bins, color="purple", histtype="bar", rwidth=0.8, align="mid", edgecolor="black")
+    ax1.set_title(f"Histogram of {prop} in {title} \n\n", fontweight="bold", fontsize=14)
+    plt.ylabel("No. of events")
+    plt.xlabel(f"{prop}")
+    plt.grid(visible= True, axis = "y", linestyle = "-", alpha = 0.7)
+    
+    size = lt.size(data)-1
+    
+    array = []
+    for i in range(0,6):
+        if i <3:
+            item = data["elements"][i]
+        else:
+            k = 6-1
+            item = data["elements"][size-k]
+        row = [str(item["time"][:16]), str(item["lat"]), str(item["long"]), str(item["title"]), str(item["code"]), str(item["mag"])]
+        array.append(row)
+        
+    
+    
+    headers = ["time", "lat", "long", "title", "code", "mag"]
+    ax2.set_axis_off()
+    
+    table = ax2.table(cellText=array, 
+                      cellLoc="center",
+                      colLabels=headers,
+                      colLoc="center", 
+                      loc="bottom",
+                      colWidths = [0.15, 0.15, 0.15, 0.3, 0.1, 0.1])
+    ax2.set_title(f"Event details in {title} in {anio}", fontweight = "bold", fontsize=14)
+    table.scale(1,2)
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    plt.subplots_adjust(bottom=0.373, hspace=0)
+    
+
+    
+    plt.show()
+    
+    
+    
+    
+        
+    
+    
+    
+    
 
 
 def print_req_8(control):

@@ -149,6 +149,29 @@ def make_datetime(string):
     rta = dt.datetime(year=int(temp[0][0]), month=int(temp[0][1]), day=int(temp[0][2]), hour=int(temp[1][0]), minute=int(temp[1][1]), second=int(temp[2][0]), microsecond=int(temp[2][1][0:size]))
     return rta
     
+def cmpfunction_int(anio1, anio2):
+    anio1 = int(anio1)
+    anio2 = int(anio2)
+    
+    if anio1 > anio2:
+        return 1
+    elif anio1 == anio2:
+        return 0
+    else: 
+        return -1
+    
+    
+def cmpfunction_str(str1, str2):
+    str1 = str(str1)
+    str2 = str(str2)
+    
+    if str1 > str2:
+        return 1
+    elif str1 == str2:
+        return 0 
+    else:
+        return -1
+    
 def req_1(data_structs, ini_date, fin_date):
     """
     Descripción: Una lista que retorna una lista los terremotos
@@ -252,6 +275,7 @@ def req_4(data_structs, sig, gap):
     # TODO: Realizar el requerimiento 4
     #creamos el mapa que usaremos para el req 4
     #usamos el valor "sig" como llave
+    
     mapa = om.newMap(omaptype="RBT", cmpfunction=cmp_4)
     #hacemos la lista donde guardaremos todos los temblores que caen en el rango
     lista = lt.newList("ARRAY_LIST")
@@ -311,13 +335,41 @@ def req_6(data_structs):
     pass
 
 
-def req_7(data_structs):
+
+def req_7(data_structs, anio, title, prop):
     """
     Función que soluciona el requerimiento 7
     """
     # TODO: Realizar el requerimiento 7
-    pass
-
+    #Primero hacemos el arbol
+    #Para esta función queremos un arbol con llaves de cada año que contiene arboles orfganizados por la propiedad dada
+    mapa = om.newMap(omaptype="RBT", cmpfunction=cmpfunction_int)
+    rta = lt.newList("ARRAY_LIST")
+    for i in lt.iterator(data_structs["temblores"]):
+        year = i["time"][:4]
+        if om.contains(mapa, year):
+            item = om.get(mapa, year)
+            lt.addLast(item["value"], i)
+        else:
+            leaf = lt.newList("ARRAY_LIST")
+            lt.addLast(leaf, i)
+            om.put(mapa, year, leaf)
+            
+    p = om.get(mapa, anio)
+    for x in lt.iterator(p["value"]):
+        if title in x["title"]:
+            lt.addLast(rta, x)
+    if prop in [ "mag", ""]:
+        cmpfunction = cmp_temblores_mag
+    elif prop == "depth":
+        cmpfunction = cmp_temblores_depth
+    else:
+        cmpfunction = cmp_temblores_sig
+    final = merg.sort(rta, sort_crit=cmpfunction)
+    return final
+            
+    
+                    
 
 def req_8(data_structs):
     """
@@ -345,6 +397,37 @@ def cmp_temblores_by_fecha(resultado1,resultado2):
     elif date_1>date_2:
         return True
     
+def cmp_temblores_mag(item1, item2):
+    
+    item1 = float(item1["mag"])
+    item2 = float(item2["mag"])
+    
+    if item1>item2:
+        return False
+    else:
+        return True
+    
+
+def cmp_temblores_depth(item1, item2):
+    
+    item1 = float(item1["depth"])
+    item2 = float(item2["depth"])
+    
+    if item1>item2:
+        return False
+    else:
+        return True
+
+def cmp_temblores_sig(item1, item2):
+    
+    item1 = int(item1["sig"])
+    item2 = int(item2["sig"])
+    
+    if item1>item2:
+        return False
+    else:
+        return True
+ 
 def cmp_temblores_by_fecha_and_magnitud(resultado1,resultado2):
     date_1=d.strptime(resultado1["time"], "%Y-%m-%dT%H:%M:%S.%fZ")
     date_2=d.strptime(resultado2["time"], "%Y-%m-%dT%H:%M:%S.%fZ")

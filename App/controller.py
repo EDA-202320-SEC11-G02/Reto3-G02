@@ -65,7 +65,7 @@ def load_data(control):
     """
     # TODO: Realizar la carga de datos
     startime = get_time()
-    temblores_file = "Data/Challenge-3/earthquakes/temblores-utf8-small.csv"
+    temblores_file = "Data/Challenge-3/earthquakes/temblores-utf8-large.csv"
     file = csv.DictReader(open(temblores_file, encoding='utf8'))
     
     for data in file:

@@ -229,20 +229,35 @@ def req_2(data_structs,lower_mag,upper_mag):
 
 def req_3(analyzer,min_magnitude,max_depth):
     eventos_filtrados = lt.newList('ARRAY_LIST')
-    for evento in lt.iterator(analyzer['earthquakes']):
-        if ( evento['mag'] >= min_magnitude and evento['depth'] <= max_depth):
+    
+    for evento in lt.iterator(analyzer['temblores']):
+        
+        if (float(evento['mag']) >= min_magnitude and float(evento['depth']) <= max_depth):
+            
             lt.addLast(eventos_filtrados,evento)
+            
     eventos_filtrados= merg.sort(eventos_filtrados, compare)
+    
     eventos_resultado = lt.subList(eventos_filtrados, 1, 10)
+    
     lista_p3_u3 = lt.newList("ARRAY_LIST")
+    
     if lt.size(eventos_resultado) < 6:
+        
         return eventos_resultado
+    
     else:
+        
         for i in range(3):
+            
             lt.addFirst(lista_p3_u3, eventos_resultado["elements"][i])
+            
         tamaño = lt.size(eventos_resultado)
+        
         for i in range(tamaño - 3, tamaño):
+            
             lt.addFirst(lista_p3_u3, eventos_resultado["elements"][i])
+            
     return lista_p3_u3,eventos_resultado
     
 def compare(lt1, lt2):
